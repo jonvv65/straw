@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Straw - Servidor de Minecraft Gens</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #191919;
+            color: #f5f5f5;
+            overflow-x: hidden;
+        }
+        
+        .nav-bar {
+            background-color: rgba(25, 25, 25, 0.8);
+            backdrop-filter: blur(5px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo-small {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffaa22;
+            text-shadow: 0 0 10px rgba(255, 170, 34, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .logo-small:hover {
+            text-shadow: 0 0 15px rgba(255, 170, 34, 0.8);
+            transform: scale(1.05);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-link {
+            color: #f5f5f5;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #ffaa22;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #ffaa22;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .button {
+            background-color: #ffaa22;
+            color: #191919;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 170, 34, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .button img {
+            width: 24px;
+            height: 24px;
+            image-rendering: pixelated;
+        }
+        
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(255, 170, 34, 0.8);
+        }
+        
+        .header {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .header-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.6);
+            animation: zoomEffect 20s infinite alternate;
+        }
+        
+        @keyframes zoomEffect {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 170, 34, 0.6);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(20vw); opacity: 0; }
+        }
+        
+        .header-content {
+            text-align: center;
+            z-index: 100;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        .main-logo {
+            font-size: 5rem;
+            font-weight: 800;
+            color: #ffaa22;
+            text-shadow: 0 0 20px rgba(255, 170, 34, 0.8);
+            margin-bottom: 20px;
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { text-shadow: 0 0 20px rgba(255, 170, 34, 0.6); }
+            50% { text-shadow: 0 0 30px rgba(255, 170, 34, 1); }
+            100% { text-shadow: 0 0 20px rgba(255, 170, 34, 0.6); }
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            color: #f5f5f5;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            color: #ffaa22;
+            margin-bottom: 50px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: #ffaa22;
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .feature-card {
+            background: linear-gradient(145deg, #1e1e1e, #242424);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            width: 300px;
+            transform: translateY(0);
+        }
+        
+        .feature-card:nth-child(1) { transform: translateY(0); }
+        .feature-card:nth-child(2) { transform: translateY(20px); }
+        .feature-card:nth-child(3) { transform: translateY(40px); }
+        .feature-card:nth-child(4) { transform: translateY(0); }
+        .feature-card:nth-child(5) { transform: translateY(20px); }
+        .feature-card:nth-child(6) { transform: translateY(40px); }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background-color: #ffaa22;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .feature-card:hover::before {
+            width: 100%;
+            opacity: 0.1;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            color: #ffaa22;
+            margin-bottom: 15px;
+        }
+        
+        .feature-description {
+            color: #ccc;
+            line-height: 1.6;
+        }
+        
+        .discord-section {
+            background: linear-gradient(45deg, #191919, #252525);
+            padding: 80px 20px;
+            text-align: center;
+            margin-top: 100px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .discord-logo {
+            width: 140px;
+            height: 100px;
+            margin-bottom: 30px;
+            animation: float-vertical 3s infinite ease-in-out;
+        }
+        
+        @keyframes float-vertical {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .discord-title {
+            font-size: 2rem;
+            color: #ffaa22;
+            margin-bottom: 20px;
+        }
+        
+        .discord-info {
+            max-width: 700px;
+            margin: 0 auto;
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .server-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: linear-gradient(145deg, #1e1e1e, #242424);
+            border-radius: 15px;
+            padding: 30px;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            color: #ffaa22;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            color: #ccc;
+            font-size: 1rem;
+        }
+        
+        footer {
+            background-color: #151515;
+            padding: 50px 20px;
+            text-align: center;
+            margin-top: 100px;
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            color: #ffaa22;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .footer-link {
+            color: #ccc;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: #ffaa22;
+        }
+        
+        .footer-text {
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 30px;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #242424;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-5px);
+            background-color: #ffaa22;
+        }
+        
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 2s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 4s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 6s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 8s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 10s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 12s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 14s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 16s; }
+        .particle:nth-child(10) { left: 95%; animation-delay: 18s; }
+
+        /* Estilos para Videos */
+        .videos-section {
+            margin-top: 100px;
+            padding: 80px 20px;
+            background: linear-gradient(45deg, #191919, #252525);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .video-card {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-wrapper {
+            position: relative;
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: #ffaa22;
+            text-decoration: none;
+            background: rgba(25, 25, 25, 0.7);
+            padding: 10px 20px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+            background: rgba(255, 170, 34, 0.8);
+            color: #191919;
+        }
+
+        .video-info {
+            padding: 15px;
+            background: linear-gradient(145deg, #1e1e1e, #242424);
+        }
+
+        .video-title {
+            font-size: 1.2rem;
+            color: #ffaa22;
+        }
+
+        /* Estilos para Fundadores */
+        .founders-section {
+            margin-top: 100px;
+            padding: 80px 20px;
+        }
+
+        .founders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .founder-card {
+            background: linear-gradient(145deg, #1e1e1e, #242424);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .founder-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .founder-skin {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            image-rendering: pixelated;
+        }
+
+        .founder-title {
+            font-size: 1.5rem;
+            color: #ffaa22;
+            margin-bottom: 10px;
+        }
+
+        .founder-role {
+            color: #ccc;
+            font-size: 1rem;
+        }
+
+        /* Estilos para Rangos */
+        .ranks-section {
+            margin-top: 100px;
+        }
+
+        .ranks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .rank-card {
+            background: linear-gradient(145deg, #1e1e1e, #242424);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .rank-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .rank-title {
+            font-size: 1.3rem;
+            color: #ffaa22;
+            margin-bottom: 15px;
+        }
+
+        .rank-description {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .rank-button {
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            animation: goldenGlow 2s infinite;
+        }
+
+        @keyframes goldenGlow {
+            0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 1); }
+            100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+        }
+
+        /* Estilos para Notificación */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #666;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        .notification.hide {
+            animation: slideLeft 0.3s forwards;
+        }
+
+        @keyframes slideLeft {
+            0% { opacity: 1; transform: translateX(0); }
+            100% { opacity: 0; transform: translateX(-100px); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 2px;
+            background-color: red;
+            animation: shrinkProgress 1s linear forwards;
+        }
+
+        @keyframes shrinkProgress {
+            0% { width: 100%; }
+            100% { width: 0; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="logo-small">STRAW</div>
+        <div class="nav-links">
+            <a href="#inicio" class="nav-link">Inicio</a>
+            <a href="#caracteristicas" class="nav-link">Características</a>
+            <a href="#gens" class="nav-link">Gens</a>
+            <a href="#videos" class="nav-link">Videos</a>
+            <a href="#comunidad" class="nav-link">Comunidad</a>
+        </div>
+        <button class="button">
+            <img src="images/steve_head.png" alt="Steve Head">
+            <span>Usuario</span>
+        </button>
+    </nav>
+
+    <header class="header" id="inicio">
+        <img class="header-img" src="/api/placeholder/1920/1080" alt="Minecraft landscape">
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+        <div class="header-content">
+            <h1 class="main-logo">STRAW</h1>
+            <p class="tagline">Crea tu isla en el mejor servidor de Gens en Craftsman</p>
+            <div class="cta-buttons">
+                <button class="button" onclick="showServerInfo()">JUGAR AHORA</button>
+                <button class="button" style="background-color: transparent; color: #ffaa22; border: 2px solid #ffaa22;">VER TUTORIAL</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        <section id="caracteristicas">
+            <h2 class="section-title">¿Qué es Straw Gens?</h2>
+            <p style="text-align: center; margin-bottom: 50px; color: #ccc; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+                En Straw, nos enorgullecemos de ofrecer la mejor experiencia de Gens en Minecraft. Nuestro servidor está diseñado para que puedas construir tu imperio económico, mejorar generadores, comerciar con otros jugadores y competir para llegar a la cima.
+            </p>
+            <div class="features">
+                <div class="feature-card">
+                    <h3 class="feature-title">Sistema de Gens Avanzado</h3>
+                    <p class="feature-description">Nuestro sistema exclusivo de generadores te permite evolucionar desde materiales básicos hasta los más raros y valiosos.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">Economía Dinámica</h3>
+                    <p class="feature-description">Mercado de jugadores, subastas en tiempo real y sistema de comercio avanzado.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">Facciones y Alianzas</h3>
+                    <p class="feature-description">Forma alianzas estratégicas, crea tu facción y domina territorios.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">Eventos Regulares</h3>
+                    <p class="feature-description">Participa en eventos semanales con recompensas exclusivas.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">Sistema de Rangos</h3>
+                    <p class="feature-description">Progresa a través de diferentes rangos con habilidades especiales.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">Soporte 24/7</h3>
+                    <p class="feature-description">Nuestro equipo está siempre disponible para ayudarte.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="gens" style="margin-top: 100px;">
+            <h2 class="section-title">Sistema de Gens</h2>
+            <div class="server-stats">
+                <div class="stat-card">
+                    <div class="stat-value">50+</div>
+                    <div class="stat-label">Tipos de Generadores</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">10x</div>
+                    <div class="stat-label">Multiplicadores en Eventos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">Potencial de Ganancias</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Generación Automática</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="videos" class="videos-section">
+            <h2 class="section-title">Videos</h2>
+            <div class="videos-grid">
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <img class="video-thumbnail" src="https://img.youtube.com/vi/BETcrw0J1Ko/maxresdefault.jpg" alt="Video Thumbnail">
+                        <a href="https://www.youtube.com/watch?v=BETcrw0J1Ko" target="_blank" class="play-button">▶</a>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Tutorial de Straw Gens</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="founders-section">
+            <h2 class="section-title">Nuestros Fundadores</h2>
+            <div class="founders-grid">
+                <div class="founder-card">
+                    <img class="founder-skin" src="images/jonvv_head.png" alt="Cabeza de Jonvv">
+                    <h3 class="founder-title">Jonvv</h3>
+                    <p class="founder-role">Fundador Principal</p>
+                </div>
+                <div class="founder-card">
+                    <img class="founder-skin" src="images/el_chini_head.png" alt="Cabeza de El_Chini">
+                    <h3 class="founder-title">El_Chini</h3>
+                    <p class="founder-role">Fundador Principal</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="ranks-section">
+            <h2 class="section-title">Catálogo de Rangos</h2>
+            <div class="ranks-grid">
+                <div class="rank-card">
+                    <h3 class="rank-title">Rango Lye - $0.69</h3>
+                    <p class="rank-description">
+                        - 2 Generadores extra<br>
+                        - +10% de ganancia<br>
+                        - Acceso a chat VIP
+                    </p>
+                    <button class="button rank-button" onclick="showNotification()">Comprar</button>
+                </div>
+                <div class="rank-card">
+                    <h3 class="rank-title">Rango Spark - $0.89</h3>
+                    <p class="rank-description">
+                        - 4 Generadores extra<br>
+                        - +20% de ganancia<br>
+                        - Kit especial semanal
+                    </p>
+                    <button class="button rank-button" onclick="showNotification()">Comprar</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="comunidad" class="discord-section">
+            <img class="discord-logo" src="images/discord_logo.png" alt="Discord Logo">
+            <h2 class="discord-title">Únete a Nuestra Comunidad</h2>
+            <p class="discord-info">Nuestro servidor de Discord es el núcleo de la comunidad Straw. Conecta con otros jugadores y mantente al día.</p>
+            <a href="https://discord.gg/gAzS3PpyhT" target="_blank"><button class="button">UNIRSE AL DISCORD</button></a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-logo">STRAW</div>
+        <div class="footer-links">
+            <a href="#" class="footer-link">Inicio</a>
+            <a href="#" class="footer-link">Características</a>
+            <a href="#" class="footer-link">Tienda</a>
+            <a href="#" class="footer-link">Reglas</a>
+            <a href="#" class="footer-link">Contacto</a>
+        </div>
+        <div class="social-icons">
+            <div class="social-icon">D</div>
+            <div class="social-icon">T</div>
+            <div class="social-icon">I</div>
+            <div class="social-icon">Y</div>
+        </div>
+        <p class="footer-text">© 2025 Straw Minecraft Server. Todos los derechos reservados.</p>
+    </footer>
+
+    <div id="notification" class="notification">
+        <span>Los rangos están en mantenimiento.</span>
+        <div class="progress-bar"></div>
+    </div>
+
+    <script>
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                notification.classList.add('hide');
+                setTimeout(() => {
+                    notification.classList.remove('hide');
+                }, 300); // Duración de la animación de salida
+            }, 1000); // Tiempo que permanece visible
+        }
+
+        function showServerInfo() {
+            prompt("Conéctate al servidor con esta información:\n\nIP: strawgg.sytes.net\nPuerto: 19132");
+        }
+    </script>
+</body>
+</html>
