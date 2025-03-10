@@ -109,12 +109,13 @@
             box-shadow: 0 5px 20px rgba(255, 170, 34, 0.8);
         }
         
+        /* Quitar subrayado de botones con enlaces */
         a.button-link {
             text-decoration: none;
         }
         
         a.button-link .button {
-            display: inline-flex; 
+            display: inline-flex;
         }
         
         .header {
@@ -649,9 +650,20 @@
 
         /* Media Queries para pantallas pequeñas */
         @media (max-width: 768px) {
+            .nav-bar {
+                padding: 8px 15px; /* Reducir padding para menos alto */
+            }
             .nav-links {
                 flex-wrap: wrap;
                 justify-content: center;
+                gap: 10px; /* Reducir espacio entre enlaces */
+            }
+            .nav-link {
+                font-size: 0.8rem; /* Reducir tamaño de fuente */
+                padding: 3px 0; /* Reducir padding interno */
+            }
+            .nav-link::after {
+                height: 1px; /* Línea más delgada */
             }
             .cta-buttons {
                 flex-direction: column;
@@ -871,6 +883,7 @@
             prompt("Conéctate al servidor con esta información:\n\nIP: strawmc.sytes.net\nPuerto: 19132");
         }
 
+        // Detectar dispositivo y actualizar el botón
         function detectDevice() {
             const userAgent = navigator.userAgent.toLowerCase();
             const deviceName = document.getElementById('device-name');
