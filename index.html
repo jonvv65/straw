@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Straw - Servidor de Minecraft Gens</title>
+    
+
+    <title>Straw | Servidor de Gens en Craftsman</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
         
@@ -96,6 +99,7 @@
             display: flex;
             align-items: center;
             gap: clamp(5px, 1vw, 8px);
+            position: relative;
         }
         
         .button img {
@@ -109,14 +113,105 @@
             box-shadow: 0 5px 20px rgba(255, 170, 34, 0.8);
         }
         
-        /* Quitar subrayado de botones con enlaces */
         a.button-link {
             text-decoration: none;
         }
         
         a.button-link .button {
-            display: inline-flex;
+            display: inline-flex; 
         }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #242424;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: none;
+            flex-direction: column;
+            padding: 10px;
+            z-index: 2000;
+        }
+        
+        .dropdown-menu.show {
+            display: flex;
+        }
+        
+        .dropdown-item {
+            color: #f5f5f5;
+            padding: 5px 15px;
+            text-decoration: none;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            color: #ffaa22;
+            background-color: #1e1e1e;
+            border-radius: 5px;
+        }
+        
+        .auth-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #242424;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 3000;
+            width: clamp(300px, 50%, 400px);
+            text-align: center;
+        }
+        
+        .auth-container.show {
+            display: block;
+        }
+        
+        .auth-container h3 {
+            color: #ffaa22;
+            margin-bottom: 20px;
+        }
+        
+        .auth-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #1e1e1e;
+            color: #f5f5f5;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+        
+        .auth-container button {
+            background-color: #ffaa22;
+            color: #191919;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .auth-container button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 170, 34, 0.8);
+        }
+        
+        .password-strength {
+            margin: 10px 0;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+        }
+        
+        .password-strength.weak { color: #ff5555; }
+        .password-strength.medium { color: #ffaa22; }
+        .password-strength.strong { color: #55ff55; }
         
         .header {
             position: relative;
@@ -435,7 +530,6 @@
         .particle:nth-child(9) { left: 90%; animation-delay: 16s; }
         .particle:nth-child(10) { left: 95%; animation-delay: 18s; }
 
-        /* Estilos para Videos */
         .videos-section {
             margin-top: 100px;
             padding: clamp(50px, 10vw, 80px) 20px;
@@ -503,17 +597,30 @@
             color: #ffaa22;
         }
 
-        /* Estilos para Fundadores */
         .founders-section {
             margin-top: 100px;
             padding: clamp(50px, 10vw, 80px) 20px;
+            text-align: center;
         }
 
-        .founders-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 40%, 250px), 1fr));
-            gap: 30px;
-            margin-top: 50px;
+        .founders-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 900px;
+            margin: 50px auto 0;
+        }
+
+        .founders-top {
+            display: flex;
+            justify-content: center;
+            gap: 100px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .founders-middle, .founders-bottom {
+            margin-top: 40px;
         }
 
         .founder-card {
@@ -523,7 +630,7 @@
             text-align: center;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            position: relative;
+            width: clamp(250px, 45%, 300px);
         }
 
         .founder-card:hover {
@@ -532,24 +639,23 @@
         }
 
         .founder-skin {
-            width: clamp(48px, 15vw, 64px);
-            height: clamp(48px, 15vw, 64px);
+            width: clamp(64px, 15vw, 80px);
+            height: clamp(64px, 15vw, 80px);
             margin: 0 auto 20px;
             image-rendering: pixelated;
         }
 
         .founder-title {
-            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            font-size: clamp(1.4rem, 4vw, 1.8rem);
             color: #ffaa22;
             margin-bottom: 10px;
         }
 
         .founder-role {
             color: #ccc;
-            font-size: clamp(0.9rem, 3vw, 1rem);
+            font-size: clamp(1rem, 3vw, 1.2rem);
         }
 
-        /* Estilos para Rangos */
         .ranks-section {
             margin-top: 100px;
         }
@@ -603,7 +709,65 @@
             100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
         }
 
-        /* Estilos para Notificación */
+        .server-status-section {
+            margin-top: 150px;
+            padding: clamp(80px, 15vw, 120px) 40px;
+            background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 170, 34, 0.2);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: glowPulse 4s infinite ease-in-out;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 170, 34, 0.2); }
+            50% { box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(255, 170, 34, 0.4); }
+        }
+
+        .server-status-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 170, 34, 0.1) 0%, rgba(255, 170, 34, 0) 70%);
+            animation: backgroundFade 6s infinite alternate;
+        }
+
+        @keyframes backgroundFade {
+            0% { opacity: 0.5; }
+            100% { opacity: 0.8; }
+        }
+
+        .server-info {
+            color: #f5f5f5;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            line-height: 1.8;
+            text-shadow: 0 0 10px rgba(255, 170, 34, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .torch {
+            width: 16px;
+            height: 16px;
+            margin: 20px auto;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABwAAYAAAAAAAD6AABtAAIFEumnAAAAxUlEQVQ4T6WTwQ2DMAxFnxPoA+gD6APoA+gD6AM4giPoA3gGdoE+wDHsOQHhKSVY8nQ+5zDGMWZ2IkmSNE3TNPd9n/fX67XVa/U0TdM0TdPMAHDOOec0TVOzFQDgcrksy7Isy/O8r+t63na7Xa/Xuq7rOI4jTdMAANi7Xq+11Wq11vX9fr/fbrfbZrPZbrfbZrPZbrfbZrPZbrfbZrPZbrfbZrPZbrfbZrPZbrfbZrPZbrfbZrPZbrfbZrPZbrfbZrPZbrfbZgC44wP2pSArGAAAAAElFTkSuQmCC') no-repeat;
+            background-size: 16px 16px;
+            image-rendering: pixelated;
+            position: relative;
+            z-index: 1;
+            animation: torchFlicker 0.5s infinite steps(2);
+        }
+
+        @keyframes torchFlicker {
+            0% { background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABwAAYAAAAAAAD6AABtAAIFEumnAAAAxUlEQVQ4T6WTwQ2DMAxFnxPoA+gD6APoA+gD6AM4giPoA3gGdoE+wDHsOQHhKSVY8nQ+5zDGMWZ2IkmSNE3TNPd9n/fX67XVa/U0TdM0TdPMAHDOOec0TVOzFQDgcrksy7Isy/O8r+t63na7Xa/Xuq7rOI4jTdMAANi7Xq+11Wq11vX9fr/fbrfbZrPZbrfbZrPZbrfbZrPZbrfbZrPZbrfbZrPZbrfbZrPZbrfbZrPZbrfbZrPZbrfbZrPZbrfbZrPZbrfbZgC44wP2pSArGAAAAAElFTkSuQmCC') no-repeat; }
+            50% { background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABwAAYAAAAAAAD6AABtAAIFEumnAAAAwklEQVQ4T6WTQQ2DMBRFnxPoA+gD6APoA+gD6AM4giPoA3gGdoE+wDHsOQHhKSVY8nQ+5zDGMWZ2IkmSNE3TdPf9/vr9er1WezRN0zRN0wwA5zznnLM0TVsBAK7X67Isy7I8z/v6rtdrt9vt9vV6nedxTGmaBgDAdr1ea621Wq11vf/39/vtdrtsNpvtdrtsNpvtdrtsNpvtdrtsNpvtdrtsNpvtdrtsNpvtdrtsNpvtdrtsNpvtdrtsNpvtdrsdAM5rAvanICsaAAAAAElFTkSuQmCC') no-repeat; }
+        }
+
         .notification {
             position: fixed;
             bottom: 20px;
@@ -648,33 +812,95 @@
             100% { width: 0; }
         }
 
-        /* Media Queries para pantallas pequeñas */
+        /* Profile Menu Styles */
+        .profile-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #242424, #1e1e1e);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(255, 170, 34, 0.2);
+            z-index: 4000;
+            width: clamp(300px, 60%, 450px);
+            text-align: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .profile-container.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        .profile-title {
+            color: #ffaa22;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 170, 34, 0.5);
+        }
+
+        .profile-info {
+            color: #ccc;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .profile-info span {
+            color: #ffaa22;
+            font-weight: 600;
+        }
+
+        .profile-footer {
+            margin-top: 30px;
+            color: #777;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+        }
+
+        .profile-back-btn {
+            margin-top: 20px;
+            background-color: #ffaa22;
+            color: #191919;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 170, 34, 0.8);
+        }
+
         @media (max-width: 768px) {
-            .nav-bar {
-                padding: 8px 15px; /* Reducir padding para menos alto */
-            }
             .nav-links {
                 flex-wrap: wrap;
                 justify-content: center;
-                gap: 10px; /* Reducir espacio entre enlaces */
-            }
-            .nav-link {
-                font-size: 0.8rem; /* Reducir tamaño de fuente */
-                padding: 3px 0; /* Reducir padding interno */
-            }
-            .nav-link::after {
-                height: 1px; /* Línea más delgada */
             }
             .cta-buttons {
                 flex-direction: column;
                 align-items: center;
             }
-            .features, .server-stats, .videos-grid, .founders-grid, .ranks-grid {
+            .features, .server-stats, .videos-grid, .ranks-grid {
                 grid-template-columns: 1fr;
             }
             .feature-card:nth-child(2), .feature-card:nth-child(3),
             .feature-card:nth-child(5), .feature-card:nth-child(6) {
                 transform: translateY(0);
+            }
+            .server-status-section {
+                padding: 40px 20px;
+            }
+            .founders-top {
+                flex-direction: column;
+                gap: 40px;
             }
         }
     </style>
@@ -693,7 +919,31 @@
             <img src="images/steve_head.png" alt="Steve Head">
             <span id="device-name">Dispositivo</span>
         </button>
+        <div class="dropdown-menu" id="dropdown-menu">
+            <a href="#" class="dropdown-item" id="login-link">Iniciar Sesión</a>
+            <a href="#" class="dropdown-item" id="profile-link" style="display: none;">Perfil</a>
+        </div>
     </nav>
+
+    <div class="auth-container" id="auth-container">
+        <h3 id="auth-title">Iniciar Sesión</h3>
+        <input type="text" id="username" placeholder="Nombre de usuario" maxlength="12">
+        <input type="password" id="password" placeholder="Contraseña">
+        <div class="password-strength" id="password-strength"></div>
+        <button id="login-btn">Iniciar Sesión</button>
+        <button id="register-btn">Registrarse</button>
+    </div>
+
+    <div class="profile-container" id="profile-container">
+        <h3 class="profile-title">Perfil de <span id="profile-username"></span></h3>
+        <p class="profile-info">Tiempo jugado: <span>0 horas</span></p>
+        <p class="profile-info">Monedas: <span>0</span></p>
+        <p class="profile-info">Esencias: <span>0</span></p>
+        <p class="profile-info">Capacidad: <span>0/50</span></p>
+        <p class="profile-info">Rango: <span>¡Adquiérelo!</span></p>
+        <p class="profile-footer">Perfil en desarrollo</p>
+        <button class="profile-back-btn" id="profile-back-btn">Regresar</button>
+    </div>
 
     <header class="header" id="inicio">
         <img class="header-img" src="/api/placeholder/1920/1080" alt="Minecraft landscape">
@@ -713,7 +963,9 @@
             <h1 class="main-logo">STRAW</h1>
             <p class="tagline">Crea tu isla en el mejor servidor de Gens en Craftsman</p>
             <div class="cta-buttons">
-                <button class="button" onclick="showServerInfo()">JUGAR AHORA</button>
+                <a href="#server-status" class="button-link">
+                    <button class="button">JUGAR AHORA</button>
+                </a>
                 <a href="https://youtu.be/4fXws34QuHo?si=UT1FBuWrdIyFAyFy" target="_blank" class="button-link">
                     <button class="button" style="background-color: transparent; color: #ffaa22; border: 2px solid #ffaa22;">VER TUTORIAL</button>
                 </a>
@@ -725,7 +977,7 @@
         <section id="caracteristicas">
             <h2 class="section-title">¿Qué es Straw Gens?</h2>
             <p style="text-align: center; margin-bottom: 50px; color: #ccc; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.6;">
-                En Straw, nos enorgullecemos de ofrecer la mejor experiencia de Gens en Minecraft. Nuestro servidor está diseñado para que puedas construir tu imperio económico, mejorar generadores, comerciar con otros jugadores y competir para llegar a la cima.
+                En Straw, nos enorgullecemos de ofrecer la mejor experiencia de Gens en Craftsman. Nuestro servidor está diseñado para que puedas crear tu isla, economizarte, mejorar generadores, comerciar con otros jugadores y competir para llegar al top.
             </p>
             <div class="features">
                 <div class="feature-card">
@@ -734,11 +986,11 @@
                 </div>
                 <div class="feature-card">
                     <h3 class="feature-title">Economía Dinámica</h3>
-                    <p class="feature-description">Mercado de jugadores, subastas en tiempo real y sistema de comercio avanzado.</p>
+                    <p class="feature-description">Obtén dinero de diversas maneras, piensa tu siguiente movimiento e invierte.</p>
                 </div>
                 <div class="feature-card">
-                    <h3 class="feature-title">Facciones y Alianzas</h3>
-                    <p class="feature-description">Forma alianzas estratégicas, crea tu facción y domina territorios.</p>
+                    <h3 class="feature-title">Islas</h3>
+                    <p class="feature-description">Forma tu propia isla con el NPC ubicado en el Spawn. (/is)</p>
                 </div>
                 <div class="feature-card">
                     <h3 class="feature-title">Eventos Regulares</h3>
@@ -793,17 +1045,33 @@
         </section>
 
         <section class="founders-section">
-            <h2 class="section-title">Nuestros Fundadores</h2>
-            <div class="founders-grid">
-                <div class="founder-card">
-                    <img class="founder-skin" src="images/jonvv_head.png" alt="Cabeza de Jonvv">
-                    <h3 class="founder-title">Jonvv</h3>
-                    <p class="founder-role">Fundador Principal</p>
+            <h2 class="section-title">Administración</h2>
+            <div class="founders-container">
+                <div class="founders-top">
+                    <div class="founder-card">
+                        <img class="founder-skin" src="images/jonvv_head.png" alt="Cabeza de Jonvv">
+                        <h3 class="founder-title">Jonvv</h3>
+                        <p class="founder-role">Fundador Principal</p>
+                    </div>
+                    <div class="founder-card">
+                        <img class="founder-skin" src="images/el_chini_head.png" alt="Cabeza de El_Chini">
+                        <h3 class="founder-title">El_Chini</h3>
+                        <p class="founder-role">Fundador Principal</p>
+                    </div>
                 </div>
-                <div class="founder-card">
-                    <img class="founder-skin" src="images/el_chini_head.png" alt="Cabeza de El_Chini">
-                    <h3 class="founder-title">El_Chini</h3>
-                    <p class="founder-role">Fundador Principal</p>
+                <div class="founders-middle">
+                    <div class="founder-card">
+                        <img class="founder-skin" src="images/gravitymc_head.png" alt="Cabeza de GravityMC">
+                        <h3 class="founder-title">GravityMC</h3>
+                        <p class="founder-role">Manager Principal</p>
+                    </div>
+                </div>
+                <div class="founders-bottom">
+                    <div class="founder-card">
+                        <img class="founder-skin" src="images/salado_yt_head.png" alt="Cabeza de Salado_YT">
+                        <h3 class="founder-title">Salado_YT</h3>
+                        <p class="founder-role">Moderador Principal</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -818,7 +1086,7 @@
                         - +10% de ganancia<br>
                         - Acceso a chat VIP
                     </p>
-                    <button class="button rank-button" onclick="showNotification()">Comprar</button>
+                    <button class="button rank-button">Comprar</button>
                 </div>
                 <div class="rank-card">
                     <h3 class="rank-title">Rango Spark - $0.89</h3>
@@ -827,15 +1095,21 @@
                         - +20% de ganancia<br>
                         - Kit especial semanal
                     </p>
-                    <button class="button rank-button" onclick="showNotification()">Comprar</button>
+                    <button class="button rank-button">Comprar</button>
                 </div>
             </div>
+        </section>
+
+        <section id="server-status" class="server-status-section">
+            <h2 class="section-title">Server Status</h2>
+            <div class="torch"></div>
+            <p class="server-info">IP: strawmc.sytes.net<br>Puerto: 19132</p>
         </section>
 
         <section id="comunidad" class="discord-section">
             <img class="discord-logo" src="images/discord_logo.png" alt="Discord Logo">
             <h2 class="discord-title">Únete a Nuestra Comunidad</h2>
-            <p class="discord-info">Nuestro servidor de Discord es el núcleo de la comunidad Straw. Conecta con otros jugadores y mantente al día.</p>
+            <p class="discord-info">Nuestro servidor de Discord es el núcleo de la comunidad Straw. Conecta con otros jugadores y mantente al día. ¡Únete a más de <span id="discord-member-count">cargando...</span> usuarios!</p>
             <a href="https://discord.gg/gAzS3PpyhT" target="_blank" class="button-link">
                 <button class="button">UNIRSE AL DISCORD</button>
             </a>
@@ -845,11 +1119,11 @@
     <footer>
         <div class="footer-logo">STRAW</div>
         <div class="footer-links">
-            <a href="#" class="footer-link">Inicio</a>
-            <a href="#" class="footer-link">Características</a>
+            <a href="#inicio" class="footer-link">Inicio</a>
+            <a href="#caracteristicas" class="footer-link">Características</a>
             <a href="#" class="footer-link">Tienda</a>
             <a href="#" class="footer-link">Reglas</a>
-            <a href="#" class="footer-link">Contacto</a>
+            <span class="footer-link" onclick="showContactNotification()">Contacto</span>
         </div>
         <div class="social-icons">
             <div class="social-icon">D</div>
@@ -857,51 +1131,243 @@
             <div class="social-icon">I</div>
             <div class="social-icon">Y</div>
         </div>
-        <p class="footer-text">© 2025 Straw Minecraft Server. Todos los derechos reservados.</p>
+        <p class="footer-text">© 2025 Straw Craftsman Server. Todos los derechos reservados.</p>
     </footer>
 
     <div id="notification" class="notification">
-        <span>Los rangos están en mantenimiento.</span>
+        <span id="notification-text">Los rangos están en mantenimiento.</span>
         <div class="progress-bar"></div>
     </div>
 
     <script>
-        function showNotification() {
-            const notification = document.getElementById('notification');
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-                notification.classList.add('hide');
-                setTimeout(() => {
-                    notification.classList.remove('hide');
-                }, 300);
-            }, 1000);
-        }
+        // Configuración
+        const DISCORD_TOKEN = 'MTM0ODY1ODAyMTI1Mjg2MjA2Mg.G8UDFa.blVX-am66_G3kF7wkGBhJ0atpHHONk9zCZkbik';
+        const DISCORD_GUILD_ID = '1348658021252862062';
 
-        function showServerInfo() {
-            prompt("Conéctate al servidor con esta información:\n\nIP: strawmc.sytes.net\nPuerto: 19132");
-        }
+        let users = JSON.parse(localStorage.getItem('users')) || {};
+        let currentUser = localStorage.getItem('currentUser');
 
-        // Detectar dispositivo y actualizar el botón
         function detectDevice() {
             const userAgent = navigator.userAgent.toLowerCase();
             const deviceName = document.getElementById('device-name');
-            
-            if (userAgent.includes('android')) {
-                deviceName.textContent = 'Android';
-            } else if (userAgent.includes('linux')) {
-                deviceName.textContent = 'Linux';
-            } else if (userAgent.includes('windows') || userAgent.includes('mac')) {
-                deviceName.textContent = 'PC';
-            } else if (userAgent.includes('tv') || userAgent.includes('smarttv')) {
-                deviceName.textContent = 'TV';
+            if (userAgent.includes('android')) deviceName.textContent = 'Android';
+            else if (userAgent.includes('linux')) deviceName.textContent = 'Linux';
+            else if (userAgent.includes('windows') || userAgent.includes('mac')) deviceName.textContent = 'PC';
+            else if (userAgent.includes('tv') || userAgent.includes('smarttv')) deviceName.textContent = 'TV';
+            else deviceName.textContent = 'Dispositivo';
+        }
+
+        const deviceButton = document.getElementById('device-button');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const loginLink = document.getElementById('login-link');
+        const profileLink = document.getElementById('profile-link');
+        const profileContainer = document.getElementById('profile-container');
+        const profileBackBtn = document.getElementById('profile-back-btn');
+
+        deviceButton.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('show');
+            updateDropdownMenu();
+        });
+
+        function updateDropdownMenu() {
+            if (currentUser) {
+                loginLink.textContent = 'Cerrar Sesión';
+                loginLink.onclick = logout;
+                profileLink.style.display = 'block';
+                profileLink.onclick = (e) => {
+                    e.preventDefault();
+                    showProfile();
+                };
             } else {
-                deviceName.textContent = 'Dispositivo';
+                loginLink.textContent = 'Iniciar Sesión';
+                loginLink.onclick = (e) => {
+                    e.preventDefault();
+                    authContainer.classList.toggle('show');
+                };
+                profileLink.style.display = 'none';
             }
         }
 
-        window.onload = detectDevice;
+        const authContainer = document.getElementById('auth-container');
+
+        function checkPasswordStrength(password) {
+            const strengthDisplay = document.getElementById('password-strength');
+            if (password.length < 6) {
+                strengthDisplay.textContent = 'Débil';
+                strengthDisplay.className = 'password-strength weak';
+                return false;
+            } else {
+                strengthDisplay.textContent = 'Normal';
+                strengthDisplay.className = 'password-strength strong';
+                return true;
+            }
+        }
+
+        document.getElementById('password').addEventListener('input', (e) => {
+            checkPasswordStrength(e.target.value);
+        });
+
+        const loginBtn = document.getElementById('login-btn');
+        loginBtn.addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const user = Object.values(users).find(u => u.username === username);
+
+            if (!user) {
+                showNotification('Usuario no encontrado');
+            } else if (user.password === password) {
+                localStorage.setItem('currentUser', username);
+                currentUser = username;
+                document.getElementById('device-name').textContent = username;
+                authContainer.classList.remove('show');
+                showNotification('¡Inicio de sesión exitoso!');
+                updateDropdownMenu();
+            } else {
+                showNotification('Contraseña incorrecta');
+            }
+        });
+
+        const registerBtn = document.getElementById('register-btn');
+        registerBtn.addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!username) {
+                showNotification('Debes ingresar un nombre de usuario');
+                return;
+            }
+            if (username.length > 12) {
+                showNotification('El nombre de usuario no puede tener más de 12 caracteres');
+                return;
+            }
+            if (Object.values(users).some(u => u.username === username)) {
+                showNotification('El usuario ya existe');
+                return;
+            }
+            if (!checkPasswordStrength(password)) {
+                showNotification('Contraseña no válida');
+                return;
+            }
+
+            users[username] = { username, password, registeredAt: new Date().toISOString() };
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            localStorage.setItem('currentUser', username);
+            currentUser = username;
+            document.getElementById('device-name').textContent = username;
+            authContainer.classList.remove('show');
+            
+            showNotification('¡Te has registrado con éxito!', true);
+            broadcastRegistration(username);
+            updateDropdownMenu();
+        });
+
+        function logout(e) {
+            e.preventDefault();
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            detectDevice();
+            dropdownMenu.classList.remove('show');
+            showNotification('¡Has cerrado sesión!');
+            updateDropdownMenu();
+        }
+
+        function showProfile() {
+            document.getElementById('profile-username').textContent = currentUser;
+            profileContainer.classList.add('show');
+            dropdownMenu.classList.remove('show');
+        }
+
+        profileBackBtn.addEventListener('click', () => {
+            profileContainer.classList.remove('show');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        function showNotification(message, isPersonal = false) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            if (!isPersonal) {
+                notificationText.innerHTML = `<img src="images/steve_head.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;"> ${message}`;
+            } else {
+                notificationText.textContent = message;
+            }
+            notification.classList.remove('hide');
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+                notification.classList.add('hide');
+            }, 1000);
+        }
+
+        function broadcastRegistration(username) {
+            if (currentUser !== username) {
+                showNotification(`${username} se ha registrado!`);
+            }
+        }
+
+        function showPurchaseNotification() {
+            if (!currentUser) {
+                showNotification('Debes iniciar sesión para comprar un rango.');
+            } else {
+                showNotification('La venta de rangos está en mantenimiento.', true);
+            }
+        }
+
+        function showContactNotification() {
+            showNotification('Discord: jonvv65', true);
+        }
+
+        function fetchDiscordMemberCount() {
+            fetch(`https://discord.com/api/v10/guilds/${DISCORD_GUILD_ID}?with_counts=true`, {
+                headers: {
+                    'Authorization': `Bot ${DISCORD_TOKEN}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('discord-member-count').textContent = data.approximate_member_count || 'N/A';
+            })
+            .catch(error => {
+                console.error('Error fetching Discord member count:', error);
+                document.getElementById('discord-member-count').textContent = 'N/A';
+            });
+        }
+
+        document.querySelectorAll('.rank-button').forEach(button => {
+            button.addEventListener('click', showPurchaseNotification);
+        });
+
+        if (currentUser && users[currentUser]) {
+            document.getElementById('device-name').textContent = currentUser;
+            updateDropdownMenu();
+        } else {
+            detectDevice();
+            updateDropdownMenu();
+        }
+        fetchDiscordMemberCount();
+
+        document.addEventListener('click', (e) => {
+            if (!deviceButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!authContainer.contains(e.target) && !loginLink.contains(e.target) && !deviceButton.contains(e.target)) {
+                authContainer.classList.remove('show');
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!profileContainer.contains(e.target) && !profileLink.contains(e.target) && !deviceButton.contains(e.target)) {
+                profileContainer.classList.remove('show');
+            }
+        });
     </script>
 </body>
 </html>
