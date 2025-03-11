@@ -906,6 +906,13 @@
     </style>
 </head>
 <body>
+    <div id="contenido"></div>
+
+    <script>
+        //gei el que lea jajajjasjajajajjajajajja
+    </script>
+</body>
+<body>
     <nav class="nav-bar">
         <div class="logo-small">STRAW</div>
         <div class="nav-links">
@@ -920,8 +927,9 @@
             <span id="device-name">Dispositivo</span>
         </button>
         <div class="dropdown-menu" id="dropdown-menu">
-            <a href="#" class="dropdown-item" id="login-link">Iniciar Sesión</a>
             <a href="#" class="dropdown-item" id="profile-link" style="display: none;">Perfil</a>
+            <a href="#" class="dropdown-item" id="logout-link" style="display: none;">Cerrar Sesión</a>
+            <a href="#" class="dropdown-item" id="login-link">Iniciar Sesión</a>
         </div>
     </nav>
 
@@ -939,7 +947,7 @@
         <p class="profile-info">Tiempo jugado: <span>0 horas</span></p>
         <p class="profile-info">Monedas: <span>0</span></p>
         <p class="profile-info">Esencias: <span>0</span></p>
-        <p class="profile-info">Capacidad: <span>0/50</span></p>
+        <p class="profile-info">Capacidad: <span>0/10</span></p>
         <p class="profile-info">Rango: <span>¡Adquiérelo!</span></p>
         <p class="profile-footer">Perfil en desarrollo</p>
         <button class="profile-back-btn" id="profile-back-btn">Regresar</button>
@@ -982,7 +990,7 @@
             <div class="features">
                 <div class="feature-card">
                     <h3 class="feature-title">Sistema de Gens Avanzado</h3>
-                    <p class="feature-description">Nuestro sistema exclusivo de generadores te permite evolucionar desde materiales básicos hasta los más raros y valiosos.</p>
+                    <p class="feature-description">Nuestro sistema exclusivo de generadores te permite comprar generadores e ir mejorándolos mediante el lapso del tiempo.</p>
                 </div>
                 <div class="feature-card">
                     <h3 class="feature-title">Economía Dinámica</h3>
@@ -994,15 +1002,15 @@
                 </div>
                 <div class="feature-card">
                     <h3 class="feature-title">Eventos Regulares</h3>
-                    <p class="feature-description">Participa en eventos semanales con recompensas exclusivas.</p>
+                    <p class="feature-description">Participa en eventos semanales con recompensas exclusivas. Eventos como: KeyAll, PvP entre otros.</p>
                 </div>
                 <div class="feature-card">
-                    <h3 class="feature-title">Sistema de Rangos</h3>
-                    <p class="feature-description">Progresa a través de diferentes rangos con habilidades especiales.</p>
+                    <h3 class="feature-title">Cajas</h3>
+                    <p class="feature-description">Progresa a través de crates, obtendrás llaves mediante el tiempo. Podrás obtener incluso rangos temporales gratuitamente.</p>
                 </div>
                 <div class="feature-card">
                     <h3 class="feature-title">Soporte 24/7</h3>
-                    <p class="feature-description">Nuestro equipo está siempre disponible para ayudarte.</p>
+                    <p class="feature-description">Nuestro equipo está siempre disponible para ayudarte. Si quieres reportar a un jugador, reportalo mediante el Discord o /report en MC.</p>
                 </div>
             </div>
         </section>
@@ -1011,12 +1019,12 @@
             <h2 class="section-title">Sistema de Gens</h2>
             <div class="server-stats">
                 <div class="stat-card">
-                    <div class="stat-value">50+</div>
+                    <div class="stat-value">20+</div>
                     <div class="stat-label">Tipos de Generadores</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">10x</div>
-                    <div class="stat-label">Multiplicadores en Eventos</div>
+                    <div class="stat-value">    6x   </div>
+                    <div class="stat-label">Multiplicador máximo</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">∞</div>
@@ -1082,18 +1090,20 @@
                 <div class="rank-card">
                     <h3 class="rank-title">Rango Lye - $0.69</h3>
                     <p class="rank-description">
-                        - 2 Generadores extra<br>
-                        - +10% de ganancia<br>
-                        - Acceso a chat VIP
+                        - 2 Slot de Generadores<br>
+                        - +1.25M mensual<br>
+                        - Llaves aleatorias<br>
                     </p>
                     <button class="button rank-button">Comprar</button>
                 </div>
                 <div class="rank-card">
                     <h3 class="rank-title">Rango Spark - $0.89</h3>
                     <p class="rank-description">
-                        - 4 Generadores extra<br>
-                        - +20% de ganancia<br>
-                        - Kit especial semanal
+                        - 4 Slot de Generadores<br>
+                        - +3.09M mensual<br>
+                        - Llaves aleatorias<br>
+                        - AutoSell (Shift)<br>
+                        
                     </p>
                     <button class="button rank-button">Comprar</button>
                 </div>
@@ -1101,15 +1111,16 @@
         </section>
 
         <section id="server-status" class="server-status-section">
-            <h2 class="section-title">Server Status</h2>
+            <h2 class="section-title">Estado del Servidor</h2>
             <div class="torch"></div>
-            <p class="server-info">IP: strawmc.sytes.net<br>Puerto: 19132</p>
+            <p class="server-info">IP: *****.sytes.net<br>Puerto: *****</p>
         </section>
 
         <section id="comunidad" class="discord-section">
             <img class="discord-logo" src="images/discord_logo.png" alt="Discord Logo">
             <h2 class="discord-title">Únete a Nuestra Comunidad</h2>
-            <p class="discord-info">Nuestro servidor de Discord es el núcleo de la comunidad Straw. Conecta con otros jugadores y mantente al día. ¡Únete a más de <span id="discord-member-count">cargando...</span> usuarios!</p>
+            <p class="discord-info">Nuestro servidor de Discord es el contacto de la comunidad Straw. Conecta con otros jugadores y mantente al día. ¡Únete a más de <span id="discord-member-count">cargando...</span> usuarios!</p>
+
             <a href="https://discord.gg/gAzS3PpyhT" target="_blank" class="button-link">
                 <button class="button">UNIRSE AL DISCORD</button>
             </a>
@@ -1140,9 +1151,8 @@
     </div>
 
     <script>
-        // Configuración
-        const DISCORD_TOKEN = 'MTM0ODY1ODAyMTI1Mjg2MjA2Mg.G8UDFa.blVX-am66_G3kF7wkGBhJ0atpHHONk9zCZkbik';
-        const DISCORD_GUILD_ID = '1348658021252862062';
+        const DISCORD_TOKEN = '';
+        const DISCORD_GUILD_ID = '';
 
         let users = JSON.parse(localStorage.getItem('users')) || {};
         let currentUser = localStorage.getItem('currentUser');
@@ -1161,6 +1171,7 @@
         const dropdownMenu = document.getElementById('dropdown-menu');
         const loginLink = document.getElementById('login-link');
         const profileLink = document.getElementById('profile-link');
+        const logoutLink = document.getElementById('logout-link');
         const profileContainer = document.getElementById('profile-container');
         const profileBackBtn = document.getElementById('profile-back-btn');
 
@@ -1169,22 +1180,28 @@
             updateDropdownMenu();
         });
 
+        window.onload = function() {
+            fetchDiscordMemberCount();
+        };
+
         function updateDropdownMenu() {
             if (currentUser) {
-                loginLink.textContent = 'Cerrar Sesión';
-                loginLink.onclick = logout;
                 profileLink.style.display = 'block';
                 profileLink.onclick = (e) => {
                     e.preventDefault();
                     showProfile();
                 };
+                logoutLink.style.display = 'block';
+                logoutLink.onclick = logout;
+                loginLink.style.display = 'none';
             } else {
-                loginLink.textContent = 'Iniciar Sesión';
+                loginLink.style.display = 'block';
                 loginLink.onclick = (e) => {
                     e.preventDefault();
                     authContainer.classList.toggle('show');
                 };
                 profileLink.style.display = 'none';
+                logoutLink.style.display = 'none';
             }
         }
 
@@ -1320,7 +1337,7 @@
         function fetchDiscordMemberCount() {
             fetch(`https://discord.com/api/v10/guilds/${DISCORD_GUILD_ID}?with_counts=true`, {
                 headers: {
-                    'Authorization': `Bot ${DISCORD_TOKEN}`
+                    'Authorization': DISCORD_TOKEN
                 }
             })
             .then(response => {
@@ -1330,11 +1347,11 @@
                 return response.json();
             })
             .then(data => {
-                document.getElementById('discord-member-count').textContent = data.approximate_member_count || 'N/A';
+                document.getElementById('discord-member-count').textContent = data.approximate_member_count || '30';
             })
             .catch(error => {
                 console.error('Error fetching Discord member count:', error);
-                document.getElementById('discord-member-count').textContent = 'N/A';
+                document.getElementById('discord-member-count').textContent = '38';
             });
         }
 
